@@ -15,9 +15,8 @@ if 'ep' in extracted_data and isinstance(extracted_data['ep'], (int, float)):
     extracted_data['ep'] = [0, extracted_data['ep'], extracted_data['ep'] + 0]
 if 'dl' in extracted_data and isinstance(extracted_data['dl'], (int, float)):
     extracted_data['dl'] = [0, extracted_data['dl'], extracted_data['dl'] + 0]
-
-
-
+if 'lsh' in extracted_data and isinstance(extracted_data['lsh'], (int, float)):
+    extracted_data['lsh'] = [0, extracted_data['lsh'], extracted_data['lsh'] + 0]
 
 for key, value in extracted_data.items():
     if isinstance(value, list):
