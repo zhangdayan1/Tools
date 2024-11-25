@@ -45,13 +45,57 @@ table_data = {
 }
 for field, values in extracted_data.items():
     if isinstance(values, list):
-        table_data["Metric Name"].append(field)
+        match field:
+            case "ep":
+                table_data["Metric Name"].append("Time To First Byte")
+            case "dl":
+                table_data["Metric Name"].append("Static Html Start Loading")
+            case "lsh":
+                table_data["Metric Name"].append("Load Static Html")            
+            case "bps":
+                table_data["Metric Name"].append("Bootstrap POST Request Sent")
+            case "pss":
+                table_data["Metric Name"].append("Prepare Start Session")
+            case "ss":
+                table_data["Metric Name"].append("Start Session")
+            case "htc":
+                table_data["Metric Name"].append("Handle TsConfig")            
+            case "lcss":
+                table_data["Metric Name"].append("Load Css")            
+            case "lvql":
+                table_data["Metric Name"].append("Load JS Mobules For Bootstrap")            
+            case "boi":
+                table_data["Metric Name"].append("BootstrapSession onInitial Callback")                   
+            case "bos":
+                table_data["Metric Name"].append("BootstrapSession onSecondaryAction Callback")            
+            case "imgld":
+                table_data["Metric Name"].append("Image Tiles Loaded")            
+            case "propri":
+                table_data["Metric Name"].append("Process Bootstrap Primary Payload")
+            case "prosec":
+                table_data["Metric Name"].append("Process Bootstrap Secondary Payload")
+            case "pld":
+                table_data["Metric Name"].append("Progressive Load")
+            case "rmld":
+                table_data["Metric Name"].append("Registered Modules Loaded for Rendering")
+            case _:
+                table_data["Metric Name"].append(field)
         table_data["Start Time"].append(values[0])
         table_data["End Time"].append(values[2])
         table_data["Elapsed Time"].append(values[1])
 for field, values in extracted_gsi_data.items():
     if isinstance(values, list):
-        table_data["Metric Name"].append(field)
+        match field:
+            case "gsi.1":
+                table_data["Metric Name"].append("Get Session Info 1")
+            case "gsi.2":
+                table_data["Metric Name"].append("Get Session Info 2")
+            case "gsi.3":
+                table_data["Metric Name"].append("Get Session Info 3")
+            case "gsi.4":
+                table_data["Metric Name"].append("Get Session Info 4")
+            case _:
+                table_data["Metric Name"].append(field)
         table_data["Start Time"].append(values[0])
         table_data["End Time"].append(values[2])
         table_data["Elapsed Time"].append(values[1])
