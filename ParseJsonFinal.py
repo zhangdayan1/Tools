@@ -1,9 +1,16 @@
 import json
 import pandas as pd
+import sys
 
 # Load the JSON data
 with open('data.json', 'r') as json_file:
     json_data = json.load(json_file)
+
+# Get the run index from the input parameter
+if len(sys.argv) < 2:
+    print("Please provide a run index as an input parameter.")
+    sys.exit(1)
+run_index = int(sys.argv[1])
 
 # Perform the transformations
 fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvql', 'bps', 'boi', 'propri', 'prosec', 'bos', 'pld', 'imgld', 'rmld', 'ep']
@@ -26,7 +33,7 @@ for key, value in extracted_data.items():
 for key, value in extracted_gsi_data.items():
     if isinstance(value, list):
         value.append(value[0] + value[1])
-    
+
 extracted_data["EPT"] = [json_data["t"] - json_data["e"], json_data["e"], json_data["t"]]
 
 # Convert to a DataFrame
@@ -51,9 +58,12 @@ for field, values in extracted_gsi_data.items():
 
 df = pd.DataFrame(table_data)
 
+# Add 'Run Index' as the first column
+df.insert(0, 'Run Index', run_index)
+
 # Sort the DataFrame by 'Start Time' in ascending order
 df = df.sort_values(by=["Start Time", "End Time"], ascending=[True, True]).reset_index(drop=True)
 
 # Save the table
-df.to_csv('converted_table.csv', index=False)
-
+output_file = f'output_{run_index}.csv'
+df.to_csv(output_file, index=False)
