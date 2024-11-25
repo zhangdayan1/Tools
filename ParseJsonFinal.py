@@ -11,8 +11,6 @@ extracted_data = {field: json_data['ei']['at'].get(field) or json_data['ei']['bt
 gsi_fields = ['gsi.1']
 extracted_gsi_data = {field: json_data['ei']['at']['gsi'].get(field) for field in gsi_fields}
 
-print(extracted_gsi_data)
-
 # Adjust the 'ep' and 'dl' fields to be arrays with a first element of 0, second as the original value, and third as their sum
 if 'ep' in extracted_data and isinstance(extracted_data['ep'], (int, float)):
     extracted_data['ep'] = [0, extracted_data['ep'], extracted_data['ep'] + 0]
