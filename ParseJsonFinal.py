@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
 run_index = int(sys.argv[1])
 
 # Perform the transformations
-fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvql', 'bps', 'boi', 'propri', 'prosec', 'bos', 'pld', 'imgld', 'rmld', 'ep']
+fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvb', 'lvql', 'bps', 'boi', 'propri', 'prosec', 'bos', 'pld', 'imgld', 'rmld', 'ep']
 extracted_data = {field: json_data['ei']['at'].get(field) or json_data['ei']['bt'].get(field) for field in fields}
 gsi_fields = ['gsi.1']
 extracted_gsi_data = {field: json_data['ei']['at']['gsi'].get(field) for field in gsi_fields}
@@ -73,7 +73,7 @@ for field, values in extracted_data.items():
             case "bos":
                 table_data["Metric Name"].append("BootstrapSession onSecondaryAction Callback")            
             case "imgld":
-                table_data["Metric Name"].append("Image Tiles Loaded")            
+                table_data["Metric Name"].append("Image Tiles Load")            
             case "propri":
                 table_data["Metric Name"].append("Process Bootstrap Primary Payload")
             case "prosec":
@@ -81,7 +81,7 @@ for field, values in extracted_data.items():
             case "pld":
                 table_data["Metric Name"].append("Progressive Load")
             case "rmld":
-                table_data["Metric Name"].append("Extra Time of Registered Modules Loading after ImageTiles Loaded")
+                table_data["Metric Name"].append("Extra Time of Async Module Load after Image Tiles Load")
             case _:
                 table_data["Metric Name"].append(field)
         table_data["Start Time"].append(values[0])
@@ -109,7 +109,7 @@ for field, values in extracted_gsi_data.items():
 # Parse async module load data
 start_time_of_mdload = min(item[0] for item in extracted_mdload_data.values())
 end_time_of_mdload = max(sum(item) for item in extracted_mdload_data.values())
-table_data["Metric Name"].append("Async Module Loaded")
+table_data["Metric Name"].append("Async Module Load")
 table_data["Start Time"].append(start_time_of_mdload)
 table_data["End Time"].append(end_time_of_mdload)
 table_data["Elapsed Time"].append(end_time_of_mdload - start_time_of_mdload)
