@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
 run_index = int(sys.argv[1])
 
 # Perform the transformations
-fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvb', 'lvql', 'bps', 'boi', 'propri', 'prosec', 'bos', 'pld', 'imgld', 'rmld', 'ep']
+fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvb', 'appstr', 'lvql', 'bps', 'boi', 'propri', 'prosec', 'bos', 'pld', 'gas', 'imgld', 'rmld', 'ep']
 extracted_data = {field: json_data['ei']['at'].get(field) or json_data['ei']['bt'].get(field) for field in fields}
 gsi_fields = ['gsi.1']
 extracted_gsi_data = {field: json_data['ei']['at']['gsi'].get(field) for field in gsi_fields}
@@ -65,7 +65,11 @@ for field, values in extracted_data.items():
             case "htc":
                 table_data["Metric Name"].append("Handle TsConfig")            
             case "lcss":
-                table_data["Metric Name"].append("Load Css")            
+                table_data["Metric Name"].append("Load Css") 
+            case "lvb":
+                table_data["Metric Name"].append("Load ViewerBootstrap Module") 
+            case "appstr":
+                table_data["Metric Name"].append("Application Startup") 
             case "lvql":
                 table_data["Metric Name"].append("Load JS Mobules For Bootstrap")            
             case "boi":
@@ -80,6 +84,8 @@ for field, values in extracted_data.items():
                 table_data["Metric Name"].append("Process Bootstrap Secondary Payload")
             case "pld":
                 table_data["Metric Name"].append("Progressive Load")
+            case "gas":
+                table_data["Metric Name"].append("Get Acceleration State for View")
             case "rmld":
                 table_data["Metric Name"].append("Extra Time of Async Module Load after Image Tiles Load")
             case _:
