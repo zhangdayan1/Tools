@@ -77,7 +77,7 @@ for field, values in extracted_data.items():
             case "pld":
                 table_data["Metric Name"].append("Progressive Load")
             case "rmld":
-                table_data["Metric Name"].append("Registered Modules Loaded for Rendering")
+                table_data["Metric Name"].append("Extra Time of Registered Modules Loading after ImageTiles Loaded")
             case _:
                 table_data["Metric Name"].append(field)
         table_data["Start Time"].append(values[0])
