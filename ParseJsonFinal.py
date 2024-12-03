@@ -67,7 +67,7 @@ if 'dl' in extracted_data and isinstance(extracted_data['dl'], (int, float)):
 if 'lsh' in extracted_data and isinstance(extracted_data['lsh'], (int, float)):
     extracted_data['lsh'] = [lsh_start_time, extracted_data['lsh'], extracted_data['lsh'] + lsh_start_time]
 
-extracted_data["EPT"] = [json_data["t"] - json_data["e"], json_data["e"], json_data["t"]]
+extracted_data["EPT"] = [int(json_data["t"]) - int(json_data["e"]), int(json_data["e"]), int(json_data["t"])]
 
 # Process mdload sub-items
 for mdload_key, mdload_value in extracted_mdload_data.items():
