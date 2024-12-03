@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
 run_index = int(sys.argv[1])
 
 # Perform the transformations
-fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvb', 'appstr', 'lvql', 'bps', 'boi', 'propri', 'prosec', 'bos', 'pld', 'gas', 'imgld', 'rmld', 'ep']
+fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvb', 'appstr', 'appint', 'lvql', 'bps', 'boi', 'propri', 'mdlini', 'prosec', 'bos', 'pld', 'gas', 'imgld', 'rmld', 'ep', 'rtload', 'tbrlay', 'tbehnt']
 extracted_data = {field: json_data['ei']['at'].get(field) or json_data['ei']['bt'].get(field) for field in fields}
 gsi_fields = ['gsi.1']
 extracted_gsi_data = {field: json_data['ei']['at']['gsi'].get(field) for field in gsi_fields}
@@ -24,9 +24,10 @@ extracted_df_data = json_data["ei"]["at"]["df"]
 if 'ep' in extracted_data and isinstance(extracted_data['ep'], (int, float)):
     extracted_data['ep'] = [0, extracted_data['ep'], extracted_data['ep'] + 0]
 if 'dl' in extracted_data and isinstance(extracted_data['dl'], (int, float)):
-    extracted_data['dl'] = [0, extracted_data['dl'], extracted_data['dl'] + 0]
+    lsh_start_time = extracted_data['dl']
+    extracted_data['dl'] = [extracted_data['dl'], 0, extracted_data['dl']]
 if 'lsh' in extracted_data and isinstance(extracted_data['lsh'], (int, float)):
-    extracted_data['lsh'] = [0, extracted_data['lsh'], extracted_data['lsh'] + 0]
+    extracted_data['lsh'] = [lsh_start_time, extracted_data['lsh'] - lsh_start_time, extracted_data['lsh']]
 
 for key, value in extracted_data.items():
     if isinstance(value, list):
@@ -46,6 +47,7 @@ table_data = {
     "Elapsed Time": []
 }
 
+application_interactive_start_time = 0
 # Parse regular EPT metrics data
 for field, values in extracted_data.items():
     if isinstance(values, list):
@@ -55,9 +57,13 @@ for field, values in extracted_data.items():
             case "dl":
                 table_data["Metric Name"].append("Static Html Start Loading")
             case "lsh":
-                table_data["Metric Name"].append("Load Static Html")            
+                table_data["Metric Name"].append("Load Static Html")    
             case "bps":
                 table_data["Metric Name"].append("Bootstrap POST Request Sent")
+                table_data["Start Time"].append(values[2])
+                table_data["End Time"].append(values[2])
+                table_data["Elapsed Time"].append(0)
+                continue
             case "pss":
                 table_data["Metric Name"].append("Prepare Start Session")
             case "ss":
@@ -69,7 +75,18 @@ for field, values in extracted_data.items():
             case "lvb":
                 table_data["Metric Name"].append("Load ViewerBootstrap Module") 
             case "appstr":
-                table_data["Metric Name"].append("Application Startup") 
+                table_data["Metric Name"].append("Vizclient Application Startup") 
+                application_interactive_start_time = values[2]
+                table_data["Start Time"].append(values[2])
+                table_data["End Time"].append(values[2])
+                table_data["Elapsed Time"].append(0)
+                continue
+            case "appint":
+                table_data["Metric Name"].append("Vizclient Becomes Interactive") 
+                table_data["Start Time"].append(application_interactive_start_time)
+                table_data["End Time"].append(values[2])
+                table_data["Elapsed Time"].append(values[2] - application_interactive_start_time)
+                continue
             case "lvql":
                 table_data["Metric Name"].append("Load JS Mobules For Bootstrap")            
             case "boi":
@@ -80,6 +97,8 @@ for field, values in extracted_data.items():
                 table_data["Metric Name"].append("Image Tiles Load")            
             case "propri":
                 table_data["Metric Name"].append("Process Bootstrap Primary Payload")
+            case "mdlini":
+                table_data["Metric Name"].append("Application Model Initialization")
             case "prosec":
                 table_data["Metric Name"].append("Process Bootstrap Secondary Payload")
             case "pld":
@@ -88,6 +107,12 @@ for field, values in extracted_data.items():
                 table_data["Metric Name"].append("Get Acceleration State for View")
             case "rmld":
                 table_data["Metric Name"].append("Extra Time of Async Module Load after Image Tiles Load")
+            case "rtload":
+                table_data["Metric Name"].append("Runtime Loaded")
+            case "tbrlay":
+                table_data["Metric Name"].append("Toolbar Layout")
+            case "tbrhnt":
+                table_data["Metric Name"].append("Toolbar Handle New Toolbar")
             case _:
                 table_data["Metric Name"].append(field)
         table_data["Start Time"].append(values[0])
