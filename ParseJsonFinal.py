@@ -64,7 +64,7 @@ extracted_data["EPT"] = [json_data["t"] - json_data["e"], json_data["e"], json_d
 for mdload_key, mdload_value in extracted_mdload_data.items():
     if isinstance(mdload_value, list):
         mdload_value.append(mdload_value[0] + mdload_value[1])
-        prefixed_key = f"[Load Module]: {mdload_key}"
+        prefixed_key = f"[Async Module Load]: {mdload_key}"
         extracted_data[prefixed_key] = mdload_value
 
 # Process df sub-items
@@ -178,7 +178,7 @@ for field, values in extracted_gsi_data.items():
 # Parse async module load data
 start_time_of_mdload = min(item[0] for item in extracted_mdload_data.values())
 end_time_of_mdload = max(sum(item) for item in extracted_mdload_data.values())
-table_data["Metric Name"].append("Async Module Load")
+table_data["Metric Name"].append("Async Modules Load")
 table_data["Start Time"].append(start_time_of_mdload)
 table_data["End Time"].append(end_time_of_mdload)
 table_data["Elapsed Time"].append(end_time_of_mdload - start_time_of_mdload)
