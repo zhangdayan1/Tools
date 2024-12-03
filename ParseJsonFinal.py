@@ -94,7 +94,6 @@ table_data = {
     "Elapsed Time": []
 }
 
-# print(extracted_data)
 application_interactive_start_time = 0
 # Parse regular EPT metrics data
 for field, values in extracted_data.items():
