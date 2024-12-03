@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import sys
 import re
+import math
 
 def convert_to_json(input_string):
     # Replace unquoted keys with quoted keys
@@ -36,10 +37,26 @@ json_data = json.loads(convert_to_json(raw_data))
 # Perform the transformations
 fields = ['dl', 'lsh', 'pss', 'ss', 'htc', 'lcss', 'lvb', 'appstr', 'appint', 'lvql', 'bps', 'boi', 'propri', 'mdlini', 'prosec', 'bos', 'pld', 'gas', 'imgld', 'rmld', 'ep', 'rtload', 'tbrlay', 'tbehnt']
 extracted_data = {field: json_data['ei']['at'].get(field) or json_data['ei']['bt'].get(field) for field in fields}
+# Convert the value of 'ep', 'dl' and 'lsh' from string to int
+extracted_data['ep'] = int(extracted_data['ep'])
+extracted_data['dl'] = int(extracted_data['dl'])
+extracted_data['lsh'] = int(extracted_data['lsh'])
 gsi_fields = ['gsi.1']
 extracted_gsi_data = {field: json_data['ei']['at']['gsi'].get(field) for field in gsi_fields}
 extracted_mdload_data = json_data["ei"]["at"]["mdload"]
 extracted_df_data = json_data["ei"]["at"]["df"]
+
+# The value of each item is an array which has three elements
+# [0]: start time
+# [1]: elapsed time
+# [2]: end time
+for key, value in extracted_data.items():
+    if isinstance(value, list):
+        value.append(value[0] + value[1])
+# Add gsi data
+for key, value in extracted_gsi_data.items():
+    if isinstance(value, list):
+        value.append(value[0] + value[1])
 
 # Adjust the 'ep' and 'dl' fields to be arrays with a first element of 0, second as the original value, and third as their sum
 if 'ep' in extracted_data and isinstance(extracted_data['ep'], (int, float)):
@@ -48,15 +65,7 @@ if 'dl' in extracted_data and isinstance(extracted_data['dl'], (int, float)):
     lsh_start_time = extracted_data['dl']
     extracted_data['dl'] = [extracted_data['dl'], 0, extracted_data['dl']]
 if 'lsh' in extracted_data and isinstance(extracted_data['lsh'], (int, float)):
-    extracted_data['lsh'] = [lsh_start_time, extracted_data['lsh'] - lsh_start_time, extracted_data['lsh']]
-
-for key, value in extracted_data.items():
-    if isinstance(value, list):
-        value.append(value[0] + value[1])
-# Add gsi data
-for key, value in extracted_gsi_data.items():
-    if isinstance(value, list):
-        value.append(value[0] + value[1])
+    extracted_data['lsh'] = [lsh_start_time, extracted_data['lsh'], extracted_data['lsh'] + lsh_start_time]
 
 extracted_data["EPT"] = [json_data["t"] - json_data["e"], json_data["e"], json_data["t"]]
 
@@ -85,6 +94,7 @@ table_data = {
     "Elapsed Time": []
 }
 
+# print(extracted_data)
 application_interactive_start_time = 0
 # Parse regular EPT metrics data
 for field, values in extracted_data.items():
@@ -176,16 +186,28 @@ for field, values in extracted_gsi_data.items():
         table_data["Elapsed Time"].append(values[1])
 
 # Parse async module load data
-start_time_of_mdload = min(item[0] for item in extracted_mdload_data.values())
-end_time_of_mdload = max(sum(item) for item in extracted_mdload_data.values())
+start_time_of_mdload = math.inf 
+end_time_of_mdload = 0
+for item in extracted_mdload_data.values():
+    if item[0] < start_time_of_mdload:
+        start_time_of_mdload = item[0]
+    if item[2] > end_time_of_mdload:
+        end_time_of_mdload = item[2]
 table_data["Metric Name"].append("Async Modules Load")
 table_data["Start Time"].append(start_time_of_mdload)
 table_data["End Time"].append(end_time_of_mdload)
 table_data["Elapsed Time"].append(end_time_of_mdload - start_time_of_mdload)
 
 # Parse download font data
-start_time_of_df = min(item[0] for item in extracted_df_data.values())
-end_time_of_df = max(sum(item) for item in extracted_df_data.values())
+start_time_of_df = math.inf
+end_time_of_df = 0
+for df_key, df_value in extracted_df_data.items():
+    if ".al." in df_key:
+        continue  # Skip this key
+    if df_value[0] < start_time_of_df:
+        start_time_of_df = df_value[0]
+    if df_value[2] > end_time_of_df:
+        end_time_of_df = df_value[2]
 table_data["Metric Name"].append("Download Fonts")
 table_data["Start Time"].append(start_time_of_df)
 table_data["End Time"].append(end_time_of_df)
