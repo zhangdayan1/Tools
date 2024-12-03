@@ -22,10 +22,13 @@ def convert_to_json(input_string):
 
 # Get the run index from the input parameter
 if len(sys.argv) < 3:
-    print("Please provide raw data file and run index as first and second input parameters.")
+    print("Please provide raw data file and run index as first and second input parameters. If you want to remove the postfix of font name and async module name, give the third parameter (true/false) which is optional. If not given, its default value would be false")
     sys.exit(1)
 raw_data_file = str(sys.argv[1])
 run_index = int(sys.argv[2])
+remove_postfix = False
+if len(sys.argv) == 4 and sys.argv[3] == 'true':
+    remove_postfix = True
 
 # Load the JSON data
 with open(raw_data_file, 'r') as file:
@@ -72,19 +75,27 @@ extracted_data["EPT"] = [int(json_data["t"]) - int(json_data["e"]), int(json_dat
 # Process mdload sub-items
 for mdload_key, mdload_value in extracted_mdload_data.items():
     if isinstance(mdload_value, list):
+        if remove_postfix:
+            mdload_key = mdload_key.rsplit('.', 1)[0]
         mdload_value.append(mdload_value[0] + mdload_value[1])
         prefixed_key = f"[Async Module Load]: {mdload_key}"
-        extracted_data[prefixed_key] = mdload_value
+        if not prefixed_key in extracted_data:
+            extracted_data[prefixed_key] = mdload_value
 
 # Process df sub-items
 for df_key, df_value in extracted_df_data.items():
     if ".al." in df_key:
         continue  # Skip this key
     if isinstance(df_value, list):
+        if remove_postfix:
+            df_key = df_key.rsplit('.', 1)[0]
         df_value.append(df_value[0] + df_value[1])
         # Prefix the key with "Download Font"
         prefixed_key = f"[Download Font]: {df_key}"
-        extracted_data[prefixed_key] = df_value
+        # If the key already exist in extract_data, that means same font is loaded multiple times. In such case keep
+        # the first record, don't overwrite it
+        if not prefixed_key in extracted_data:
+            extracted_data[prefixed_key] = df_value
 
 # Convert to a DataFrame
 table_data = {
