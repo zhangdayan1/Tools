@@ -9,7 +9,7 @@ def convert_to_json(input_string):
 
     # Step 2: Add quotes around unquoted string values (but not numbers, booleans, or null)
     fixed = re.sub(r':\s*([a-zA-Z0-9_\-]+)(?=\s*[,}])', r': "\1"', fixed)
-    
+
     # Fix empty values (like sid:)
     fixed = re.sub(r':\s*,', r': "",', fixed)
 
@@ -59,6 +59,23 @@ for key, value in extracted_gsi_data.items():
         value.append(value[0] + value[1])
 
 extracted_data["EPT"] = [json_data["t"] - json_data["e"], json_data["e"], json_data["t"]]
+
+# Process mdload sub-items
+for mdload_key, mdload_value in extracted_mdload_data.items():
+    if isinstance(mdload_value, list):
+        mdload_value.append(mdload_value[0] + mdload_value[1])
+        prefixed_key = f"[Load Module]: {mdload_key}"
+        extracted_data[prefixed_key] = mdload_value
+
+# Process df sub-items
+for df_key, df_value in extracted_df_data.items():
+    if ".al." in df_key:
+        continue  # Skip this key
+    if isinstance(df_value, list):
+        df_value.append(df_value[0] + df_value[1])
+        # Prefix the key with "Download Font"
+        prefixed_key = f"[Download Font]: {df_key}"
+        extracted_data[prefixed_key] = df_value
 
 # Convert to a DataFrame
 table_data = {
