@@ -1,0 +1,242 @@
+{
+  "bt": {
+    "i": 1,
+    "to": 1758211579712.9,
+    "ep": 407,
+    "em": "sameDomainEmbedded",
+    "aid": "host0",
+    "nt": 0,
+    "rm": "render-mode-client",
+    "ffs": {
+      "WebpImageTiles": true
+    },
+    "re": 408,
+    "phc": 0,
+    "pht": 0,
+    "psv": true,
+    "pev": true,
+    "fho": -1,
+    "ws": 4,
+    "tb": 9
+  },
+  "at": {
+    "aep": [
+      0,
+      775
+    ],
+    "lsh": [
+      408,
+      12
+    ],
+    "pss": [
+      61,
+      0
+    ],
+    "ss": [
+      61,
+      701
+    ],
+    "htc": [
+      763,
+      1
+    ],
+    "lvb": [
+      764,
+      16
+    ],
+    "lcss": [
+      764,
+      0
+    ],
+    "lvql": [
+      764,
+      157
+    ],
+    "boi": [
+      778,
+      1302
+    ],
+    "ibr": [
+      0,
+      779
+    ],
+    "bps": [
+      0,
+      779
+    ],
+    "appstr": [
+      0,
+      909
+    ],
+    "tbrlay": [
+      925,
+      0
+    ],
+    "bos": [
+      2080,
+      44
+    ],
+    "clntld": [
+      2080,
+      140
+    ],
+    "imgld": [
+      2080,
+      140
+    ],
+    "propri": [
+      2084,
+      40
+    ],
+    "mdlini": [
+      2084,
+      13
+    ],
+    "mdlevt": [
+      2098,
+      26
+    ],
+    "tbrhnt": [
+      2118,
+      2
+    ],
+    "appint": [
+      0,
+      2124
+    ],
+    "prosec": [
+      2131,
+      3
+    ],
+    "uz": [
+      2131,
+      2
+    ],
+    "pld": [
+      2134,
+      87
+    ],
+    "rmld": [
+      2221,
+      221
+    ],
+    "gas": [
+      2228,
+      69
+    ],
+    "pmu": [
+      2236,
+      0
+    ],
+    "mdload": {
+      "viz-viewer-toolbar.1": [
+        918,
+        73
+      ],
+      "guided-onboarding.2": [
+        1100,
+        73
+      ],
+      "built-dojo/dojo/dojo.3": [
+        2084,
+        135
+      ],
+      "mapbox-gl.4": [
+        2170,
+        127
+      ],
+      "built-dojo/tableau/clientweb.5": [
+        2218,
+        85
+      ],
+      "typescript-telemetry-forwarder.6": [
+        2229,
+        75
+      ],
+      "typescript-endeavour.7": [
+        2229,
+        92
+      ],
+      "platform.8": [
+        2237,
+        88
+      ],
+      "LegacyDojoUIWeb.9": [
+        2303,
+        125
+      ]
+    },
+    "gsi": {
+      "gsi.1": [
+        913,
+        186
+      ]
+    },
+    "exerem": {
+      "notify-first-client-render-occurred.1": [
+        2138,
+        94
+      ]
+    },
+    "prorem": {
+      "notify-first-client-render-occurred.1": [
+        2235,
+        1
+      ]
+    },
+    "df": {
+      "Benton Sans Low-DPI.1": [
+        2124,
+        53
+      ],
+      "Benton Sans Low-DPI.2": [
+        2124,
+        37
+      ],
+      "Tableau Book.3": [
+        2124,
+        70
+      ],
+      "Tableau Semibold.4": [
+        2124,
+        70
+      ],
+      "Tableau Medium.5": [
+        2124,
+        72
+      ],
+      "Benton Sans Low-DPI.al.6": [
+        2230,
+        0
+      ],
+      "Benton Sans Low-DPI.al.7": [
+        2230,
+        0
+      ],
+      "Tableau Book.al.8": [
+        2230,
+        0
+      ],
+      "Tableau Semibold.al.9": [
+        2230,
+        0
+      ],
+      "Tableau Medium.al.10": [
+        2230,
+        0
+      ],
+      "Tableau Bold.11": [
+        2230,
+        44
+      ],
+      "Tableau Book.12": [
+        2230,
+        1
+      ],
+      "Tableau Regular.al.13": [
+        2230,
+        0
+      ]
+    }
+  }
+}
